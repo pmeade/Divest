@@ -1,13 +1,22 @@
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: #282c34;
+    color: #ffffff;
 }
 
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+/* Login Container */
 #login-container {
     display: flex;
     flex-direction: column;
@@ -16,10 +25,42 @@ body {
     height: 100vh;
 }
 
+#login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-form input {
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    width: 200px;
+}
+
+#login-form button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #61dafb;
+    color: #282c34;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#login-form button:hover {
+    background-color: #21a1f1;
+}
+
+/* App Container */
 #app-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    display: none;
 }
 
 #post-container {
@@ -28,47 +69,59 @@ body {
     height: 400px;
     overflow: hidden;
     margin-bottom: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .post {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: white;
+    background-color: #61dafb;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
+    font-size: 1.5rem;
+    color: #282c34;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-#controls {
+#controls, #vote-controls {
     display: flex;
     justify-content: space-between;
     width: 300px;
     margin-bottom: 20px;
+}
+
+#controls .action-button, #vote-controls button {
+    padding: 10px 20px;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 #controls .action-button {
-    padding: 10px 20px;
-    font-size: 24px;
-    cursor: pointer;
+    background-color: #61dafb;
+    color: #282c34;
 }
 
-#vote-controls {
-    display: flex;
-    justify-content: space-between;
-    width: 300px;
-    margin-bottom: 20px;
+#controls .action-button:hover {
+    background-color: #21a1f1;
 }
 
 #vote-controls button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
+    background-color: #61dafb;
+    color: #282c34;
+}
+
+#vote-controls button:hover {
+    background-color: #21a1f1;
 }
 
 #hashtag-form, #post-form {
@@ -81,5 +134,22 @@ body {
 #hashtag-form input, #post-form input, #hashtag-form button, #post-form button {
     padding: 10px;
     margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+}
+
+#hashtag-form input, #post-form input {
+    width: calc(100% - 20px);
+}
+
+#hashtag-form button, #post-form button {
+    background-color: #61dafb;
+    color: #282c34;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#hashtag-form button:hover, #post-form button:hover {
+    background-color: #21a1f1;
 }
