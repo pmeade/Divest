@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <form id="post-form">
+        <select id="category">
+            <option value="want">I want</option>
+            <option value="think">I think</option>
+            <option value="fact">It is a fact that</option>
+            <option value="choose">I choose</option>
+        </select>
+        <input type="text" id="post-text" placeholder="What's on your mind?" required>
+        <input type="text" id="post-hashtags" placeholder="Hashtags (comma separated)">
+        <button type="submit">Post</button>
+    </form>
+    <script src="post.js"></script>
+</body>
+</html>

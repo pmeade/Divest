@@ -1,60 +1,53 @@
-const Peer = require('peerjs');
-const posts = []; // In-memory database of posts
+const Peer = require('peerjs-nodejs');
+const fetch = require('node-fetch');
 
-// Initialize PeerJS with a specific ID
-const peer = new Peer('peer-seed-1', {
-    host: 'YOUR_NAT_SERVER_IP_OR_DOMAIN', // Replace with your NAT server's IP or domain
+const peer = new Peer(undefined, {
+    host: '3.142.92.89',
     port: 9000,
-    path: '/peerjs',
-    secure: true // Use secure connection if your NAT server supports HTTPS
+    path: '/peerjs'
 });
 
-peer.on('open', (id) => {
+peer.on('open', id => {
     console.log('Dummy peer ID is: ' + id);
+    // Connect to other peers and maintain a live body of posts
     connectToPeers();
 });
 
-peer.on('connection', (connection) => {
-    connection.on('data', (data) => {
+peer.on('connection', conn => {
+    conn.on('data', data => {
         console.log('Received', data);
-        handleReceivedPost(data);
+        // Handle received data (e.g., store posts)
     });
 });
 
 function connectToPeers() {
-    const peerIds = ['peer-seed-2', 'peer-seed-3']; // Replace with actual peer IDs
-    peerIds.forEach(peerId => {
-        const connection = peer.connect(peerId);
-        connection.on('open', () => {
-            console.log('Connected to peer: ' + peerId);
-            connection.on('data', (data) => {
-                console.log('Received from peer:', data);
-                handleReceivedPost(data);
-            });
-        });
+    // Example: Connect to another dummy peer
+    const conn = peer.connect('another-dummy-peer-id');
+    conn.on('open', () => {
+        conn.send('Hello from dummy peer!');
     });
 }
 
-function handleReceivedPost(post) {
-    // Store the received post in the in-memory database
-    posts.push(post);
-    console.log('Post received and stored:', post);
-}
-
-// Function to add a post (for testing purposes)
+// Example function to add a post
 function addPost(post) {
-    posts.push(post);
-    console.log('Post added:', post);
-    gossipPost(post);
-}
-
-function gossipPost(post) {
-    peer.connections.forEach(connections => {
-        connections.forEach(connection => {
-            connection.send(post);
-        });
+    fetch('http://3.142.92.89/api/posts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Post added:', data);
     });
 }
 
-// Example usage (for testing purposes)
-addPost({ text: 'Hello, world!', hashtags: ['#example'], votes: { upvote: 0, downvote: 0 } });
+// Example function to get all posts
+function getPosts() {
+    fetch('http://3.142.92.89:9000/api/posts')
+    .then(response => response.json())
+    .then(data => {
+        console.log('Posts:', data);
+    });
+}
