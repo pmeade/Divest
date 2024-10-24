@@ -59,6 +59,7 @@ function handlePostSubmit(event) {
     };
     posts.push(newPost);
     savePost(newPost);
+    sharePost(newPost);
 
     const newPostElement = document.createElement('div');
     newPostElement.className = 'post';

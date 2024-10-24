@@ -10,14 +10,18 @@ function initDB() {
     request.onsuccess = (event) => {
         db = event.target.result;
         loadPosts();
+        loadAccountData();
     };
 
     request.onupgradeneeded = (event) => {
         db = event.target.result;
-        const objectStore = db.createObjectStore('posts', { keyPath: 'id', autoIncrement: true });
-        objectStore.createIndex('text', 'text', { unique: false });
-        objectStore.createIndex('hashtags', 'hashtags', { unique: false, multiEntry: true });
-        objectStore.createIndex('votes', 'votes', { unique: false });
+        const postStore = db.createObjectStore('posts', { keyPath: 'id', autoIncrement: true });
+        postStore.createIndex('text', 'text', { unique: false });
+        postStore.createIndex('hashtags', 'hashtags', { unique: false, multiEntry: true });
+        postStore.createIndex('votes', 'votes', { unique: false });
+
+        const accountStore = db.createObjectStore('account', { keyPath: 'username' });
+        accountStore.createIndex('peers', 'peers', { unique: false, multiEntry: true });
     };
 }
 
@@ -41,8 +45,29 @@ function loadPosts() {
     };
 }
 
+function loadAccountData() {
+    const transaction = db.transaction(['account'], 'readonly');
+    const objectStore = transaction.objectStore('account');
+    const request = objectStore.get(localStorage.getItem('username'));
+
+    request.onsuccess = (event) => {
+        const accountData = event.target.result;
+        if (accountData) {
+            peers = accountData.peers;
+        } else {
+            peers = [];
+        }
+    };
+}
+
 function savePost(post) {
     const transaction = db.transaction(['posts'], 'readwrite');
     const objectStore = transaction.objectStore('posts');
     objectStore.put(post);
+}
+
+function saveAccountData(accountData) {
+    const transaction = db.transaction(['account'], 'readwrite');
+    const objectStore = transaction.objectStore('account');
+    objectStore.put(accountData);
 }
