@@ -1,36 +1,38 @@
-const Peer = require('peerjs-nodejs');
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
+import Peer from 'simple-peer';
+import wrtc from 'wrtc';
 
-const peer = new Peer(undefined, {
-    host: '3.142.92.89',
-    port: 9000,
-    path: '/peerjs'
+const peer = new Peer({
+    initiator: true,
+    wrtc: wrtc
 });
 
-peer.on('open', id => {
-    console.log('Dummy peer ID is: ' + id);
-    // Connect to other peers and maintain a live body of posts
-    connectToPeers();
+peer.on('signal', data => {
+    console.log('Signal data:', data);
+    // Send this signal data to the other peer
 });
 
-peer.on('connection', conn => {
-    conn.on('data', data => {
-        console.log('Received', data);
-        // Handle received data (e.g., store posts)
-    });
+peer.on('connect', () => {
+    console.log('Connected to another peer');
+    peer.send('Hello from dummy peer!');
 });
 
-function connectToPeers() {
-    // Example: Connect to another dummy peer
-    const conn = peer.connect('another-dummy-peer-id');
-    conn.on('open', () => {
-        conn.send('Hello from dummy peer!');
-    });
-}
+peer.on('data', data => {
+    console.log('Received data:', data);
+});
+
+peer.on('close', () => {
+    console.log('Connection closed');
+});
+
+peer.on('error', err => {
+    console.error('Peer error:', err);
+});
 
 // Example function to add a post
 function addPost(post) {
-    fetch('http://3.142.92.89/api/posts', {
+    console.log('Adding post:', post);
+    fetch('http://your-nat-server-public-dns:9000/api/posts', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -40,14 +42,24 @@ function addPost(post) {
     .then(response => response.json())
     .then(data => {
         console.log('Post added:', data);
+    })
+    .catch(err => {
+        console.error('Error adding post:', err);
     });
 }
 
 // Example function to get all posts
 function getPosts() {
-    fetch('http://3.142.92.89:9000/api/posts')
+    console.log('Fetching all posts');
+    fetch('http://your-nat-server-public-dns:9000/api/posts')
     .then(response => response.json())
     .then(data => {
         console.log('Posts:', data);
+    })
+    .catch(err => {
+        console.error('Error fetching posts:', err);
     });
 }
+
+// Keep the process running
+setInterval(() => {}, 1000);
