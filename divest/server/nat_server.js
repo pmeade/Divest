@@ -8,7 +8,7 @@ const app = express();
 app.use(morgan('combined'));
 
 // Create an Express server
-const server = app.listen(9000, () => {
+const server = app.listen(9000, '::', () => {
     console.log('NAT Traversal server is running on port 9000');
 });
 
