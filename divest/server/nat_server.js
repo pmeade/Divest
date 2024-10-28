@@ -2,6 +2,8 @@ import express from 'express';
 import { ExpressPeerServer } from 'peer';
 import morgan from 'morgan';
 import cors from 'cors';
+import fs from 'fs';
+import https from 'https';
 
 const app = express();
 
@@ -11,8 +13,17 @@ app.use(morgan('combined'));
 // Use CORS middleware to allow cross-origin requests
 app.use(cors());
 
-// Create an Express server
-const server = app.listen(9000, '::', () => {
+// Load self-signed certificate and key from the certs directory
+const privateKey = fs.readFileSync('certs/selfsigned.key', 'utf8');
+const certificate = fs.readFileSync('certs/selfsigned.crt', 'utf8');
+
+const credentials = {
+    key: privateKey,
+    cert: certificate
+};
+
+// Create an HTTPS server
+const server = https.createServer(credentials, app).listen(9000, () => {
     console.log('NAT Traversal server is running on port 9000');
 });
 

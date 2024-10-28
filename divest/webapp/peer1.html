@@ -14,7 +14,8 @@
             host: '18.222.43.232', // Use the public IP of your NAT server
             port: 9000,
             path: '/peerjs',
-            secure: false // Set to true if using HTTPS
+            secure: true, // Set to true to use HTTPS
+            debug: 3 // Enable detailed logging
         });
 
         peer.on('open', (id) => {
