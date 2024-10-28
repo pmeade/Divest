@@ -1,11 +1,15 @@
 import express from 'express';
 import { ExpressPeerServer } from 'peer';
 import morgan from 'morgan';
+import cors from 'cors';
 
 const app = express();
 
 // Use morgan middleware for logging
 app.use(morgan('combined'));
+
+// Use CORS middleware to allow cross-origin requests
+app.use(cors());
 
 // Create an Express server
 const server = app.listen(9000, '::', () => {
