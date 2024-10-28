@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peer 1</title>
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.3.2/dist/peerjs.min.js"></script>
+</head>
+<body>
+    <h1>Peer 1</h1>
+    <button id="connect">Connect to Peer 2</button>
+    <script>
+        const peer = new Peer('peer1', {
+            host: 'localhost', // Use localhost since the NAT server is running locally
+            port: 9000,
+            path: '/',
+            secure: false // Set to true if using HTTPS
+        });
+
+        peer.on('open', (id) => {
+            console.log('Peer 1 ID:', id);
+        });
+
+        peer.on('connection', (conn) => {
+            conn.on('data', (data) => {
+                console.log('Received from Peer 2:', data);
+            });
+        });
+
+        peer.on('error', (err) => {
+            console.error('Peer error:', err);
+        });
+
+        peer.on('disconnected', () => {
+            console.warn('Peer disconnected');
+        });
+
+        peer.on('close', () => {
+            console.warn('Peer connection closed');
+        });
+
+        document.getElementById('connect').addEventListener('click', () => {
+            const conn = peer.connect('peer2');
+            conn.on('open', () => {
+                conn.send('Hello from Peer 1');
+            });
+            conn.on('error', (err) => {
+                console.error('Connection error:', err);
+            });
+        });
+    </script>
+</body>
+</html>
